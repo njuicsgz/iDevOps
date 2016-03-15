@@ -2,7 +2,10 @@
 ```
 # docker pull mysql:5.5
 mkdir -p /pdata/docker/mysql
-docker run --name mysql -p 23306:3306 -v /pdata/docker/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Letmein123 -h mysql -d njuicsgz/mysql:5.5
+docker run --name mysql -p 23306:3306 \
+  -v /pdata/docker/mysql:/var/lib/mysql \
+  -e MYSQL_ROOT_PASSWORD=Letmein123 \
+  -h mysql -d njuicsgz/mysql:5.5
 ```
 #2. install keystone (Master，rerun该container会自动删除并重建DB)
 ```
@@ -55,7 +58,9 @@ docker run \
   -e HEAT_DOMAIN_PASS=Letmein123 \
   -d njuicsgz/heat:kilo
 ```
+```
 PS: 
 1. MySQL可以使用单独可路由的外部DB，此时不在需要--link mysql:mysql
 2. keystone不与Heat绑定在一个Host，但需要将keystone的WIP加入到/etc/hosts，因为从keystone返回的endpoint是用该域名
 3. 创建之后，heat的endpoint将会是：--publicurl http://${KEYSTONE_HOST_IP}:8000/v1；所以访问该heat的客户端同样需要2的操作
+```
