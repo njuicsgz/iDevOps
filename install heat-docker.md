@@ -60,7 +60,7 @@ docker run \
   -e HEAT_PASS=Letmein123 \
   -e HEAT_DBPASS=Letmein123 \
   -e HEAT_DOMAIN_PASS=Letmein123 \
-  -d njuicsgz/heat:kilo-k8s-1.0.6
+  -d njuicsgz/heat:kilo
 ```
 ```
 PS: 
