@@ -2,7 +2,7 @@
 ```
 # docker pull mysql:5.5
 mkdir -p /pdata/docker/mysql
-docker run --name mysql -p 23306:3306 \
+docker run --name mysql \
   -v /pdata/docker/mysql:/var/lib/mysql \
   -e MYSQL_ROOT_PASSWORD=Letmein123 \
   -h mysql -d njuicsgz/mysql:5.5
@@ -37,12 +37,16 @@ $ docker run -d --hostname rabbitmq --name rabbitmq -e RABBITMQ_DEFAULT_PASS=Let
 ```
 #4. install heat
 ```
+mkdir -p /pdata/docker/heat
+# You MUST write k8s certification into this file
+touch /pdata/docker/heat/.kube_cert
 docker run \
   -p 8004:8004 \
   --link mysql:mysql\
   --link rabbitmq:rabbitmq\
   --link keystone:keystone\
   -v /var/log/heat:/var/log/heat \
+  -v /pdata/docker/heat/:/root \
   --hostname heat \
   --name heat \
   -e KEYSTONE_HOST_IP=keystone \
