@@ -68,6 +68,7 @@ PS:
 1. MySQL可以使用单独可路由的外部DB，此时不在需要--link mysql:mysql
 2. keystone不与Heat绑定在一个Host，但需要将keystone的WIP加入到/etc/hosts，因为从keystone返回的endpoint是用该域名
 3. 创建之后，heat的endpoint将会是：--publicurl http://${KEYSTONE_HOST_IP}:8000/v1；所以访问该heat的客户端同样需要2的操作
+4. 需要将所需访问k8s的根证书放在/pdata/docker/heat/.kube_cert中，否则heat无法访问k8s
 ```
 # Verify
 NEED: echo '${KEYSTONE_HOST_WIP} keystone' >> etc/hosts
