@@ -21,8 +21,6 @@ RUN cd /python-kubernetes && python setup.py install
 ADD heat-kubernetes-plugin /heat-kubernetes-plugin
 RUN cd /heat-kubernetes-plugin/heat_kubernetes && python setup.py install
 
-#install cert file for kubernetes, default domain is dev.k8s.paas.ndp.com
-ADD .kube_cert /root/
 
 EXPOSE 8004
 

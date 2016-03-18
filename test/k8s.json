@@ -2,7 +2,7 @@
     "description": "Heat template to deploy kubernetes replication controllers and services to an existing host", 
     "heat_template_version": "2013-05-23", 
     "resources": {
-        "ym-mysql-bs-rc": {
+        "test-rc-rc": {
             "properties": {
                 "apiversion": "v1", 
                 "definition": {
@@ -10,22 +10,22 @@
                     "kind": "ReplicationController", 
                     "metadata": {
                         "labels": {
-                            "name": "ym-mysql-bs", 
+                            "name": "test-rc", 
                             "version": "latest"
                         }, 
-                        "name": "ym-mysql-bs-latest", 
+                        "name": "test-rc-latest", 
                         "namespace": "default"
                     }, 
                     "spec": {
                         "replicas": 1, 
                         "selector": {
-                            "name": "ym-mysql-bs", 
+                            "name": "test-rc", 
                             "version": "latest"
                         }, 
                         "template": {
                             "metadata": {
                                 "labels": {
-                                    "name": "ym-mysql-bs", 
+                                    "name": "test-rc", 
                                     "version": "latest"
                                 }, 
                                 "namespace": "default"
@@ -48,7 +48,7 @@
                                             }
                                         ], 
                                         "image": "xa.repo.ndp.com:5000/paas/ubuntu-sshd", 
-                                        "name": "ym-mysql-bs", 
+                                        "name": "test-rc", 
                                         "ports": [], 
                                         "resources": {
                                             "limits": {

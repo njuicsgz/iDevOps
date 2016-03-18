@@ -88,8 +88,9 @@ fi
 echo "Updating database tables"
 heat-manage db_sync
 
-echo "set /etc/hosts"
-echo ${ETC_HOSTS} >> /etc/hosts
+echo "set /etc/hosts: ${ETC_HOSTS}"
+echo -e ${ETC_HOSTS} >> /etc/hosts
+cat /etc/hosts
 
 echo "Starting heat using supervisord..."
 exec /usr/bin/supervisord -n
