@@ -2,7 +2,7 @@
 ```
 # docker pull mysql:5.5
 mkdir -p /pdata/docker/mysql
-docker run --name mysql -p 23306:3306 \
+docker run --name mysql \
   -v /pdata/docker/mysql:/var/lib/mysql \
   -e MYSQL_ROOT_PASSWORD=Letmein123 \
   -h mysql -d njuicsgz/mysql:5.5
@@ -37,12 +37,16 @@ $ docker run -d --hostname rabbitmq --name rabbitmq -e RABBITMQ_DEFAULT_PASS=Let
 ```
 #4. install heat
 ```
+mkdir -p /pdata/docker/heat
+# You MUST write k8s certification into this file
+touch /pdata/docker/heat/.kube_cert
 docker run \
   -p 8004:8004 \
   --link mysql:mysql\
   --link rabbitmq:rabbitmq\
   --link keystone:keystone\
   -v /var/log/heat:/var/log/heat \
+  -v /pdata/docker/heat/:/root \
   --hostname heat \
   --name heat \
   -e KEYSTONE_HOST_IP=keystone \
@@ -56,11 +60,32 @@ docker run \
   -e HEAT_PASS=Letmein123 \
   -e HEAT_DBPASS=Letmein123 \
   -e HEAT_DOMAIN_PASS=Letmein123 \
-  -d njuicsgz/heat:kilo
+  -e ETC_HOSTS='172.30.10.185 dev.k8s.paas.ndp.com' \
+  -d njuicsgz/heat:kilo-k8s-1.0.6
 ```
 ```
 PS: 
 1. MySQL可以使用单独可路由的外部DB，此时不在需要--link mysql:mysql
 2. keystone不与Heat绑定在一个Host，但需要将keystone的WIP加入到/etc/hosts，因为从keystone返回的endpoint是用该域名
 3. 创建之后，heat的endpoint将会是：--publicurl http://${KEYSTONE_HOST_IP}:8000/v1；所以访问该heat的客户端同样需要2的操作
+```
+# Verify
+NEED: echo '${KEYSTONE_HOST_WIP} keystone' >> etc/hosts
+```
+# heat resource-type-list | grep Google
+| GoogleInc::Kubernetes::ReplicationController |
+| GoogleInc::Kubernetes::Service               |
+
+# heat stack-list
++--------------------------------------+------------+-----------------+----------------------+
+| id                                   | stack_name | stack_status    | creation_time        |
++--------------------------------------+------------+-----------------+----------------------+
+| 1824a6c4-09bf-41ba-a455-5c18ce2d39a8 | kk3        | CREATE_COMPLETE | 2016-03-17T08:49:14Z |
++--------------------------------------+------------+-----------------+----------------------+
+# heat stack-delete kk3
++--------------------------------------+------------+--------------------+----------------------+
+| id                                   | stack_name | stack_status       | creation_time        |
++--------------------------------------+------------+--------------------+----------------------+
+| 1824a6c4-09bf-41ba-a455-5c18ce2d39a8 | kk3        | DELETE_IN_PROGRESS | 2016-03-17T08:49:14Z |
++--------------------------------------+------------+--------------------+----------------------+
 ```
