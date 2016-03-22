@@ -26,33 +26,25 @@ pre_check()
     fi
 }
 
-pull_images()
+
+install_mysql()
 {
     echo 'pulling njuicsgz/mysql:5.5...'
     docker pull njuicsgz/mysql:5.5
     
-    echo 'pulling rabbitmq...'
-    docker pull rabbitmq
-    
-    echo 'pulling njuicsgz/keystone:juno...'
-    docker pull njuicsgz/keystone:juno
-    
-    echo 'pulling njuicsgz/heat:kilo-k8s-1.0.6...'
-    docker pull njuicsgz/heat:kilo-k8s-1.0.6
-}
-
-install_mysql()
-{
     docker rm -f mysql
     mkdir -p /pdata/docker/mysql
     docker run --name mysql -h mysql -v /pdata/docker/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Letmein123 -d njuicsgz/mysql:5.5
-    echo 'sleep 3s to ensure mysql is ready'
-    sleep 3
+    echo 'sleep 5s to ensure mysql is ready'
+    sleep 5 
     echo 'intalled mysql'
 }
 
 install_rabbitmq()
 {
+    echo 'pulling rabbitmq...'
+    docker pull rabbitmq
+    
     echo 'sleep 2s to ensure rabbitmq is ready'
     sleep 2 
     docker rm -f rabbitmq
@@ -62,6 +54,9 @@ install_rabbitmq()
 
 install_keystone()
 {
+    echo 'pulling njuicsgz/keystone:juno...'
+    docker pull njuicsgz/keystone:juno
+    
     docker rm -f keystone
     docker run -d \
         --link mysql:mysql\
@@ -77,6 +72,9 @@ install_keystone()
 
 install_heat()
 {
+    echo 'pulling njuicsgz/heat:kilo-k8s-1.0.6...'
+    docker pull njuicsgz/heat:kilo-k8s-1.0.6
+
     docker rm -f heat
     docker run \
       -p 8004:8004 \
@@ -131,7 +129,6 @@ fi
 
 
 pre_check
-pull_images
 install_mysql
 install_rabbitmq
 install_keystone
