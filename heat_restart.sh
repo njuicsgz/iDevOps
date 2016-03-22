@@ -124,6 +124,12 @@ install_heatclient()
 hosts_conf=$1
 my_ip=$(get_my_ip)
 
+if [[ $# != 1 ]]; then
+    echo 'usage: ./heat_restart.sh "172.30.10.185 dev.k8s.paas.ndp.com\n172.30.10.122 k8s.paas.ndp.com"'
+    exit 1
+fi
+
+
 pre_check
 pull_images
 install_mysql
@@ -131,5 +137,3 @@ install_rabbitmq
 install_keystone
 install_heat
 #install_heatclient
-
-#usage: ./heat_restart.sh "172.30.10.185 dev.k8s.paas.ndp.com\n172.30.10.122 k8s.paas.ndp.com"
